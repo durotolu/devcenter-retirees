@@ -50,12 +50,6 @@ const DataSection = () => {
           <DataCard icon={icon} header={header} details={details} />
         ))}
       </div>
-
-      {/* <p className="text-gray-600 mt-4">
-        Whether you're a retiree claiming your benefits or an employer
-        submitting employee data for verification, our secure platform provides
-        a seamless experience.
-      </p> */}
     </section>
   );
 };

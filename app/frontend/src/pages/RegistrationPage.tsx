@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Group from "../assests/Group 17.png";
+import { registerUser } from "../services/authService";
+import { handleApiError } from "../utils/handleErrors";
+import AuthImage from "../components/AuthImage";
 
 const RegistrationPage = () => {
+  const [rsaPin, setRsaPin] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleLoginNavigation = () => {
@@ -11,17 +21,24 @@ const RegistrationPage = () => {
     navigate("/");
   };
 
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await registerUser(rsaPin, surname, email, password);
+      handleLoginNavigation()
+      // Redirect user to login page or dashboard
+    } catch (err) {
+      setError(handleApiError(err));
+    }
+  };
+
   return (
     <div className="flex h-screen flex-row overflow-hidden">
-      <div className="w-1/3 bg-gray-200">
-        <h3 className="text-h3 mt-5 ml-5 font-semibold">Logo</h3>
-        <img
-          src={Group}
-          alt="Group"
-          className="h-full w-full object-contain grayscale mt-32"
-        />
-      </div>
-
+      <AuthImage />
       <div className="w-2/3 flex flex-col justify-center items-center bg-white">
         <div className="w-3/5 h-full flex flex-col justify-between mt-16">
           <div>
@@ -39,13 +56,22 @@ const RegistrationPage = () => {
                 Enter your details to start your pension process
               </div>
             </div>
-            <form className="w-full">
+            {error && <p className="text-error">{error}</p>}
+            <form
+              className="w-full"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleRegister();
+              }}
+            >
               <div>
                 <label className="block text-gray-600">RSA Pin*</label>
                 <input
                   type="text"
                   placeholder="xxxxxx"
                   className="w-full h-14 border rounded-sm border-gray-300 mb-6 p-3"
+                  value={rsaPin}
+                  onChange={(e) => setRsaPin(e.target.value)}
                 />
               </div>
 
@@ -55,6 +81,8 @@ const RegistrationPage = () => {
                   type="text"
                   placeholder="Surname"
                   className="w-full h-14 border rounded-sm border-gray-300 mb-6 p-3"
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
                 />
               </div>
 
@@ -64,6 +92,8 @@ const RegistrationPage = () => {
                   type="email"
                   placeholder="Your email address"
                   className="w-full h-14 border rounded-sm border-gray-300 mb-6 p-3"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -74,6 +104,8 @@ const RegistrationPage = () => {
                     type="password"
                     placeholder="xxxxxx"
                     className="w-full h-14 border rounded-sm border-gray-300 p-3"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <div className="text-smallCaption text-gray-400 py-2">
                     Help text
@@ -87,11 +119,16 @@ const RegistrationPage = () => {
                     type="password"
                     placeholder="Confirm Password"
                     className="w-full h-14 border rounded-sm border-gray-300 p-3"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </div>
               </div>
 
-              <button className="bg-primary-700 text-white text-body w-full py-3 rounded">
+              <button
+                className="bg-primary-700 text-white text-body w-full py-3 rounded"
+                type="submit"
+              >
                 Register
               </button>
               <div className="text-gray-400 text-body mt-6">

@@ -45,7 +45,7 @@ const DataSection = () => {
         Retiree data processing
         <br /> <span className="text-primary-600">made easy!</span>
       </h1>
-      <div className="flex flex-wrap gap-x-8 gap-y-10">
+      <div className="grid grid-cols-3 gap-x-8 gap-y-10">
         {cardsData.map(({icon, header, details}) => (
           <DataCard icon={icon} header={header} details={details} />
         ))}

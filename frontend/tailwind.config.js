@@ -15,6 +15,7 @@ module.exports = {
         darkGreen: '#081B0E',
         error: '#D62020',
         gray: {
+          50: '#F9F9F9',
           100: '#F3F3F3',
           200: '#C0C0C1',
           300: '#B5B5B5',
@@ -43,4 +44,3 @@ module.exports = {
   },
   plugins: [],
 }
-
